@@ -34,7 +34,8 @@ class LanguagePage extends ConsumerWidget {
               title: Row(
                 children: [
                   Flexible(
-                    child: Text(locale?.humanName ?? t.settingsTab.general.languageOptions.system),
+                    child: Text(locale?.humanName ??
+                        t.settingsTab.general.languageOptions.system),
                   ),
                   if (locale == activeLocale) ...[
                     const SizedBox(width: 10),

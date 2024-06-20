@@ -9,13 +9,16 @@ ThemeData getTheme(Brightness brightness, ColorScheme? colorScheme) {
   colorScheme ??= ColorScheme.fromSwatch(
     primarySwatch: Colors.teal,
     brightness: brightness,
-    backgroundColor: brightness == Brightness.light ? Colors.white : Colors.grey.shade900,
+    backgroundColor:
+        brightness == Brightness.light ? Colors.white : Colors.grey.shade900,
   ).copyWith(
     // overrides for LocalSend theme
     onError: Colors.white,
-    secondaryContainer:
-        brightness == Brightness.light ? Color.lerp(Colors.teal.shade100, Colors.white, 0.5) : Color.lerp(Colors.teal.shade100, Colors.black, 0.6),
-    onSecondaryContainer: brightness == Brightness.light ? Colors.black : Colors.white,
+    secondaryContainer: brightness == Brightness.light
+        ? Color.lerp(Colors.teal.shade100, Colors.white, 0.5)
+        : Color.lerp(Colors.teal.shade100, Colors.black, 0.6),
+    onSecondaryContainer:
+        brightness == Brightness.light ? Colors.black : Colors.white,
   );
 
   final lightInputBorder = OutlineInputBorder(
@@ -57,26 +60,34 @@ ThemeData getTheme(Brightness brightness, ColorScheme? colorScheme) {
     useMaterial3: true,
     navigationBarTheme: brightness == Brightness.dark
         ? NavigationBarThemeData(
-            iconTheme: MaterialStateProperty.all(const IconThemeData(color: Colors.white)),
+            iconTheme: MaterialStateProperty.all(
+                const IconThemeData(color: Colors.white)),
           )
         : null,
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: colorScheme.secondaryContainer,
-      border: brightness == Brightness.light ? lightInputBorder : darkInputBorder,
-      focusedBorder: brightness == Brightness.light ? lightInputBorder : darkInputBorder,
-      enabledBorder: brightness == Brightness.light ? lightInputBorder : darkInputBorder,
+      border:
+          brightness == Brightness.light ? lightInputBorder : darkInputBorder,
+      focusedBorder:
+          brightness == Brightness.light ? lightInputBorder : darkInputBorder,
+      enabledBorder:
+          brightness == Brightness.light ? lightInputBorder : darkInputBorder,
       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: brightness == Brightness.dark ? Colors.white : null,
-        padding: checkPlatformIsDesktop() ? const EdgeInsets.all(16) : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: checkPlatformIsDesktop()
+            ? const EdgeInsets.all(16)
+            : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        padding: checkPlatformIsDesktop() ? const EdgeInsets.all(16) : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: checkPlatformIsDesktop()
+            ? const EdgeInsets.all(16)
+            : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
     ),
     fontFamily: fontFamily,
@@ -88,9 +99,12 @@ Future<void> updateSystemOverlayStyle(BuildContext context) async {
   await updateSystemOverlayStyleWithBrightness(brightness);
 }
 
-Future<void> updateSystemOverlayStyleWithBrightness(Brightness brightness) async {
+Future<void> updateSystemOverlayStyleWithBrightness(
+    Brightness brightness) async {
   final style = SystemUiOverlayStyle(
-    statusBarIconBrightness: brightness == Brightness.light ? Brightness.dark : Brightness.light, // android
+    statusBarIconBrightness: brightness == Brightness.light
+        ? Brightness.dark
+        : Brightness.light, // android
     statusBarBrightness: brightness, // iOS
     systemNavigationBarColor: Colors.transparent,
     statusBarColor: Colors.transparent,
@@ -103,7 +117,8 @@ Future<void> updateSystemOverlayStyleWithBrightness(Brightness brightness) async
 extension ThemeDataExt on ThemeData {
   /// This is the actual [cardColor] being used.
   Color get cardColorWithElevation {
-    return ElevationOverlay.applySurfaceTint(cardColor, colorScheme.surfaceTint, 1);
+    return ElevationOverlay.applySurfaceTint(
+        cardColor, colorScheme.surfaceTint, 1);
   }
 }
 

@@ -142,7 +142,6 @@ class _ProgressPageState extends ConsumerState<ProgressPage> {
 
     final receiveSession = ref.watch(serverProvider.select((s) => s?.session));
     final sendSession = ref.watch(sendProvider)[widget.sessionId];
-
     final SessionStatus? status = receiveSession?.status ?? sendSession?.status;
     if (status == null) {
       return Scaffold(

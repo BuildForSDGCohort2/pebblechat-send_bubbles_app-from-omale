@@ -1,4 +1,3 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +20,11 @@ import 'package:localsend_app/widget/watcher/tray_watcher.dart';
 import 'package:localsend_app/widget/watcher/window_watcher.dart';
 import 'package:routerino/routerino.dart';
 
+final ColorScheme lightColorScheme =
+    ColorScheme.fromSwatch(primarySwatch: Colors.blue);
+final ColorScheme darkColorScheme =
+    ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey);
+
 String? deviceIDDDD;
 Future<void> main(List<String> args) async {
   await AppCache.init();
@@ -34,7 +38,7 @@ Future<void> main(List<String> args) async {
       tvProvider.overrideWithValue(await checkIfTv()),
     ],
     child: TranslationProvider(
-      child: const LocalSendApp(),
+      child: LocalSendApp(),
     ),
   ));
 }
@@ -57,30 +61,25 @@ class LocalSendApp extends ConsumerWidget {
             }
           },
           child: ShortcutWatcher(
-            child: DynamicColorBuilder(
-              builder: (lightColor, darkColor) {
-                return MaterialApp(
-                  title: t.appName,
-                  locale: TranslationProvider.of(context).flutterLocale,
-                  supportedLocales: AppLocaleUtils.supportedLocales,
-                  localizationsDelegates: GlobalMaterialLocalizations.delegates,
-                  debugShowCheckedModeBanner: false,
-                  theme: getTheme(Brightness.light,
-                      colorMode == ColorMode.system ? lightColor : null),
-                  darkTheme: getTheme(Brightness.dark,
-                      colorMode == ColorMode.system ? darkColor : null),
-                  themeMode: themeMode,
-                  navigatorKey: Routerino.navigatorKey,
-                  home: RouterinoHome(
-                    builder: () => const HomePage(
-                      initialTab: HomeTab.send,
-                      appStart: true,
-                    ),
-                  ),
-                );
-              },
+              child: MaterialApp(
+            title: t.appName,
+            locale: TranslationProvider.of(context).flutterLocale,
+            supportedLocales: AppLocaleUtils.supportedLocales,
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            debugShowCheckedModeBanner: false,
+            theme: getTheme(Brightness.light,
+                colorMode == ColorMode ? lightColorScheme : null),
+            darkTheme: getTheme(Brightness.dark,
+                colorMode == ColorMode.system ? darkColorScheme : null),
+            themeMode: themeMode,
+            navigatorKey: Routerino.navigatorKey,
+            home: RouterinoHome(
+              builder: () => const HomePage(
+                initialTab: HomeTab.send,
+                appStart: true,
+              ),
             ),
-          ),
+          )),
         ),
       ),
     );
