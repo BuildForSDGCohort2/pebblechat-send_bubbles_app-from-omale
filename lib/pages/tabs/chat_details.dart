@@ -44,75 +44,76 @@ class _ChatDetailsScreenState extends ConsumerState<ChatDetailsScreen> {
     dynamic myAliasMap = jsonDecode(settings.alias);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(theirAliasMap['alias']),
-      ),
-      body: GestureDetector(
-        onTap: hideKeyboard,
-        child: SafeArea(
-          child: FooterLayout(
-            footer: Padding(
-              padding: const EdgeInsets.only(left: 8, bottom: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CupertinoTextField(
-                      controller: controller,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: Colors.grey),
+        backgroundColor: Color(0xffddddddd),
+        appBar: AppBar(
+          title: Text(theirAliasMap['alias']),
+        ),
+        body: GestureDetector(
+          onTap: hideKeyboard,
+          child: SafeArea(
+            child: FooterLayout(
+              footer: Padding(
+                padding: const EdgeInsets.only(left: 8, bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CupertinoTextField(
+                        controller: controller,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12), // Adjust radius as needed
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        onChanged: (msg) {},
                       ),
-                      onChanged: (msg) {},
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      Map data = {
-                        'message': controller.text,
-                        'from': settings.alias,
-                        'to': widget.device.alias,
-                        'msgId': const Uuid().v4(),
-                        'isRead': false,
-                        'date': DateTime.now().millisecondsSinceEpoch,
-                      };
 
-                      ref
-                          .read(selectedSendingFilesProvider.notifier)
-                          .addMessage(jsonEncode(data));
-                      final files = ref.read(selectedSendingFilesProvider);
-                      if (files.isEmpty) {
-                        await context.pushBottomSheet(
-                          () => NoFilesDialog(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        );
-                        return;
-                      }
-                      controller.clear();
-                      await AppCache.setMessage(jsonEncode(data));
+                    IconButton(
+                      onPressed: () async {
+                        Map data = {
+                          'message': controller.text,
+                          'from': settings.alias,
+                          'to': widget.device.alias,
+                          'msgId': const Uuid().v4(),
+                          'isRead': false,
+                          'date': DateTime.now().millisecondsSinceEpoch,
+                        };
 
-                      await ref.read(sendProvider.notifier).startSession(
-                            target: widget.device,
-                            files: files,
-                            background: false,
+                        ref
+                            .read(selectedSendingFilesProvider.notifier)
+                            .addMessage(jsonEncode(data));
+                        final files = ref.read(selectedSendingFilesProvider);
+                        if (files.isEmpty) {
+                          await context.pushBottomSheet(
+                            () => NoFilesDialog(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           );
-                    },
-                    icon: const Icon(Icons.send),
-                  ),
-                ],
+                          return;
+                        }
+                        controller.clear();
+                        await AppCache.setMessage(jsonEncode(data));
+
+                        await ref.read(sendProvider.notifier).startSession(
+                              target: widget.device,
+                              files: files,
+                              background: false,
+                            );
+                      },
+                      icon: const Icon(Icons.send),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            child: NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (OverscrollIndicatorNotification overscroll) {
-                overscroll.disallowIndicator();
-                return true;
-              },
-              child: ListView.builder(
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (OverscrollIndicatorNotification overscroll) {
+                  overscroll.disallowIndicator();
+                  return true;
+                },
+                child: ListView.builder(
                   shrinkWrap: true,
                   reverse: true,
                   controller: AppCache.sController,
@@ -127,16 +128,29 @@ class _ChatDetailsScreenState extends ConsumerState<ChatDetailsScreen> {
                         .toList()[i];
                     bool isMine = msg.from?.deviceId == AppCache.deviceId();
 
-                    return Container(
+                    return Align(
+                      alignment:
+                          isMine ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
                         margin: EdgeInsets.only(
                           bottom: 12,
-                          right: !isMine ? 100 : 0,
-                          left: isMine ? 100 : 0,
+                          right: isMine ? 8 : 100,
+                          left: isMine ? 100 : 8,
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 6, horizontal: 6),
+                            vertical: 10, horizontal: 14),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
+                          color: isMine ? Color(0xffbbebf1) : Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: isMine
+                                ? Radius.circular(20)
+                                : Radius.circular(0),
+                            bottomRight: isMine
+                                ? Radius.circular(0)
+                                : Radius.circular(20),
+                          ),
                           border: Border.all(color: Colors.grey),
                         ),
                         child: Column(
@@ -150,7 +164,12 @@ class _ChatDetailsScreenState extends ConsumerState<ChatDetailsScreen> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            Text(msg.message!),
+                            Text(
+                              msg.message!,
+                              style: TextStyle(
+                                color: isMine ? Colors.white : Colors.black,
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -160,19 +179,23 @@ class _ChatDetailsScreenState extends ConsumerState<ChatDetailsScreen> {
                                         msg.date!),
                                   ),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
-                            )
+                            ),
                           ],
-                        ));
-                  }),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 

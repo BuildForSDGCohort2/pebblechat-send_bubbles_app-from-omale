@@ -153,7 +153,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).scaffoldBackgroundColor
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -76,6 +76,7 @@ class _ReceivePageState extends ConsumerState<ReceivePage> {
     if (receiveSession == null) {
       // when declining/accepting the request, there is a short frame where tempRequest is null
       return Scaffold(
+        backgroundColor:Colors.black,
         body: Container(),
       );
     }
@@ -87,6 +88,7 @@ class _ReceivePageState extends ConsumerState<ReceivePage> {
         return true;
       },
       child: Scaffold(
+
         body: SafeArea(
           child: Center(
             child: ConstrainedBox(

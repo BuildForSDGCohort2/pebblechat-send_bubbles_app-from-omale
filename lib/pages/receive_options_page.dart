@@ -34,19 +34,15 @@ class ReceiveOptionsPage extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Text(t.receiveOptionsPage.destination,
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(t.receiveOptionsPage.destination, style: Theme.of(context).textTheme.titleLarge),
               if (checkPlatformWithFileSystem())
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: CustomIconButton(
                     onPressed: () async {
-                      final directory =
-                          await FilePicker.platform.getDirectoryPath();
+                      final directory = await FilePicker.platform.getDirectoryPath();
                       if (directory != null) {
-                        ref
-                            .read(serverProvider.notifier)
-                            .setSessionDestinationDir(directory);
+                        ref.read(serverProvider.notifier).setSessionDestinationDir(directory);
                       }
                     },
                     child: const Icon(Icons.edit),
@@ -55,16 +51,13 @@ class ReceiveOptionsPage extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 5),
-          Text(checkPlatformWithFileSystem()
-              ? receiveSession.destinationDirectory
-              : t.receiveOptionsPage.appDirectory),
+          Text(checkPlatformWithFileSystem() ? receiveSession.destinationDirectory : t.receiveOptionsPage.appDirectory),
           if (checkPlatformWithGallery())
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                Text(t.receiveOptionsPage.saveToGallery,
-                    style: Theme.of(context).textTheme.titleLarge),
+                Text(t.receiveOptionsPage.saveToGallery, style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -78,8 +71,7 @@ class ReceiveOptionsPage extends ConsumerWidget {
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(minWidth: 80),
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(b ? t.general.on : t.general.off),
                             ),
                           ),
@@ -87,18 +79,14 @@ class ReceiveOptionsPage extends ConsumerWidget {
                       }).toList(),
                       onChanged: (b) {
                         if (b != null) {
-                          ref
-                              .read(serverProvider.notifier)
-                              .setSessionSaveToGallery(b);
+                          ref.read(serverProvider.notifier).setSessionSaveToGallery(b);
                         }
                       },
                     ),
-                    if (receiveSession.containsDirectories &&
-                        !receiveSession.saveToGallery) ...[
+                    if (receiveSession.containsDirectories && !receiveSession.saveToGallery) ...[
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Text(t.receiveOptionsPage.saveToGalleryOff,
-                            style: const TextStyle(color: Colors.grey)),
+                        child: Text(t.receiveOptionsPage.saveToGalleryOff, style: const TextStyle(color: Colors.grey)),
                       ),
                     ]
                   ],
@@ -108,16 +96,13 @@ class ReceiveOptionsPage extends ConsumerWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              Text(t.general.files,
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(t.general.files, style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(width: 10),
               Tooltip(
                 message: t.dialogs.quickActions.title,
                 child: CustomIconButton(
                   onPressed: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (_) => const QuickActionsDialog());
+                    await showDialog(context: context, builder: (_) => const QuickActionsDialog());
                   },
                   child: const Icon(Icons.tips_and_updates),
                 ),
@@ -127,10 +112,7 @@ class ReceiveOptionsPage extends ConsumerWidget {
                 message: t.general.reset,
                 child: CustomIconButton(
                   onPressed: () async {
-                    ref.read(selectedReceivingFilesProvider.notifier).init(
-                        receiveSession.files.values
-                            .map((f) => f.file)
-                            .toList());
+                    ref.read(selectedReceivingFilesProvider.notifier).init(receiveSession.files.values.map((f) => f.file).toList());
                   },
                   child: const Icon(Icons.undo),
                 ),
@@ -162,11 +144,8 @@ class ReceiveOptionsPage extends ConsumerWidget {
                           style: TextStyle(
                               color: !selectState.containsKey(file.file.id)
                                   ? Colors.grey
-                                  : (selectState[file.file.id] ==
-                                          file.file.fileName
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .onSecondaryContainer
+                                  : (selectState[file.file.id] == file.file.fileName
+                                      ? Theme.of(context).colorScheme.onSecondaryContainer
                                       : Colors.orange)),
                         )
                       ],
@@ -187,10 +166,7 @@ class ReceiveOptionsPage extends ConsumerWidget {
                                   ),
                                 );
                                 if (result != null) {
-                                  ref
-                                      .read(selectedReceivingFilesProvider
-                                          .notifier)
-                                      .rename(file.file.id, result);
+                                  ref.read(selectedReceivingFilesProvider.notifier).rename(file.file.id, result);
                                 }
                               },
                         child: const Icon(Icons.edit),
@@ -201,13 +177,9 @@ class ReceiveOptionsPage extends ConsumerWidget {
                         checkColor: Theme.of(context).colorScheme.surface,
                         onChanged: (selected) {
                           if (selected == true) {
-                            ref
-                                .read(selectedReceivingFilesProvider.notifier)
-                                .select(file.file);
+                            ref.read(selectedReceivingFilesProvider.notifier).select(file.file);
                           } else {
-                            ref
-                                .read(selectedReceivingFilesProvider.notifier)
-                                .unselect(file.file.id);
+                            ref.read(selectedReceivingFilesProvider.notifier).unselect(file.file.id);
                           }
                         },
                       ),
